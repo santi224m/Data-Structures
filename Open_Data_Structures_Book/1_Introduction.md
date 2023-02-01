@@ -71,4 +71,27 @@
 * Time complexity: the running time of operations should be as small as possible
 * Space complexity: the data structure should use as little memory as possible
 * There are three kinds of running time guarantees:
-  * Worst-case running times: 
+  * Worst-case running times - These are the strongest kinds of guarantees. If an operation has a running time of f(n), then running the operation will always be equal to or less than f(n)
+  * Amortized running times - These running times give the typical cost of running an operation. The actual running time can be more than the amortized running time, but on average it is usuallty less than or equal to it.
+  * Expected running times - When we give an expected running time, then it means that the actual running time is a random variable. If the expected running time is f(n), then the expected value of this variable is at most f(n). The randomization has to do with random choices made by the data structure
+* It can sometimes be simpler to settle for an amortized or expected running time than using a worst-case scenario running time
+
+# Code Samples
+
+* The book doesn't always include all the c++ code in order to make it understandable by those who don't know c++
+* To see the full implementation, look at the source code
+* The book mixes mathematical analysis of running times with c++ code for the algorithms being analyzed.
+* Many of the variables in the math equations are exactly the same in the source code
+* The variable n will always be used to represent the number of items stored in the data structure
+
+# List of Data Structures
+
+This graph shows which chapters build on top of each other, so that you what you have to read before starting a certain chapter
+
+![image](./Images/Dependency_Graph.png)
+
+# Discussion and Exercises
+
+You can learn more about logarithms and exponentials with this textbook: [Calculus Made Easy by Silvanus P. Thompson](https://www.gutenberg.org/ebooks/33283)
+
+
