@@ -52,11 +52,11 @@
 # Pointers
 
 * Pointers point to a an address in memory
-
+```
 int a = 5;
-int* p;
+int* p; // p is a pointer
 
-p = &a;
+p = &a; // p is assigned the memory location of a
 
 cout << a; // 5
 cout << (*p); // 5
@@ -67,6 +67,7 @@ a++ // sets a to 6
 ```
 
 * You should use paranthesis when dereferencing a pointer like in the code below
+  * This is to help clarify which operation you want to do first, which is dereference
 * You have to use the delete keyword to deallocate pointers to avoid memory leaks
 
 ```
