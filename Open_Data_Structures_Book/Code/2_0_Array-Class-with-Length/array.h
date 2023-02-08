@@ -13,6 +13,13 @@ class Array {
       return a[i];
     }
   }
+  Array<T>& operator=(Array<T> &b) {
+    if (a != NULL) delete[] a;  // delete array a if it already exists
+    a = b.a;
+    b.a = NULL;
+    length_ = b.GetSize();
+    return *this;
+  }
 
  private:
   T* a;
