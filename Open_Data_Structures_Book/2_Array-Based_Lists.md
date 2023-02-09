@@ -99,7 +99,7 @@ int main() {
 
 ```cpp
 Array<T> a;
-int n;  // keeps track of elements in array
+int n;  // keeps track of amount of elements in array
 int size() {
   return n;
 }
@@ -143,8 +143,8 @@ void add(int i, T x) {
   * We are not taking into consideration the potential cost of running the ```resize()``` function
 * This operation has a running time of **O(n-i)**
 * For the ```remove(i)``` function, we shift the elements ```a[i+1]...a[n-1]``` one position to the left, overwriting the element that we are removing
-* We have to decrease the value of n by 1
-* We also check if our value of n is a lot smaller than the length of the array, and if it is we run the ```resize()``` function to shrink the array
+* We have to decrease the value of ```n``` by 1
+* We also check if our value of ```n``` is a lot smaller than the length of the array, and if it is we run the ```resize()``` function to shrink the array
 * Finally, we return the value of the element we removed
 ```cpp
 T remove(int i) {
@@ -160,7 +160,7 @@ T remove(int i) {
 ```
 * The cost of running this operation is the same as running the ```add(i, x)``` operation
   * The running time is proportional to the amount of elements we shift
-  * The running time is **O(n-1)**
+  * The running time is **O(n-i)**
   
 ### Growing and Shrinking
 
@@ -179,3 +179,19 @@ void resize() {
   a = b;
 }
 ```
+
+* The cost of running the above operation is **O(n)**
+* We analyze the cost of ```resize()``` using *amortized analysis*
+  * This means that we don't calculate the cost of ```resize()``` every time that the ```add(i,x)``` and ```remove(i)``` functions are called, instead we calculate the total cost of ```resize()``` over a sequence of ```m``` calls to ```add(i,x)``` and ```remove(i)```
+  * We do this because ```resize()``` isn't called everytime the ```add(i,x)``` and ```remove(i)``` functions are called
+  
+### Summary
+* An **ArrayStack** implements the **List** interface
+* Ignoring the cost of ```resize()```:
+  * ```get(i)``` and ```set(i,x)``` run in **O(1)**
+  * ```add(i,x)``` and ```remove(i)``` run in **O(1+n-i)**
+* Beginning with an empty ArrayStack and and performing a sequence of ```m``` ```add(i,x)``` and ```remove(i)``` operations results in a running time of **O(m)** for all calls to ```resize()```
+* The ArrayStack is an efficient way to implement a Stack
+* We can implement ```push(x)``` as ```add(n,x)```
+* We can implement ```pop()``` as ```remove(n-1)```
+* Both these functions will run in **O(1)** amortized time
