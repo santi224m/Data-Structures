@@ -195,3 +195,29 @@ void resize() {
 * We can implement ```push(x)``` as ```add(n,x)```
 * We can implement ```pop()``` as ```remove(n-1)```
 * Both these functions will run in **O(1)** amortized time
+
+## FastArrayStack: An Optimized ArrayStack
+
+* Arrays shift elements everytime we run the ```add(i,x)``` and ```remove(i)``` functions, and copy elements every time we run the ```resize()``` function
+* Many programming languages have efficient functions for doing these operations
+  * It is more efficient to use these functions than it is to use for loops
+  * In c++ there is the ```std::copy(a0,a1,b)``` algorithm
+* The ```resize()``` function optimized to use ```std::copy(a0,a1,b)```:
+  * Here the ```std::copy(a+0, a+n, b+0)``` function copies all the elements ```a[0]...a[n]``` to ```b``` starting at ```b[0]```
+```cpp
+void resize() {
+  array<T> b(std::max(2 * n, 1));
+  std::copy(a+0, a+n, b+0);
+  a = b;
+}
+```
+* The ```add(i,x)``` function optimized to use ```std::copy_backward(a0, a1, a2)```:
+  * Here ```std::copy_backward(a+i, a+n, a+n+1)``` copys ```a[i]...a[n]``` to ```a[i+1]...a[n+1]```, effectively shifting the elements one position to the right
+```cpp
+void add(int i, T x) {
+  if (n + 1 > a.length) resize();
+  std::copy_backward(a+i, a+n, a+n+1);
+  a[i] = x;
+  n++;
+}
+```
