@@ -221,3 +221,5 @@ void add(int i, T x) {
   n++;
 }
 ```
+* These funtions are highly optimized and using them is more efficient than using a for loop
+* Using these function doesn't change the running times, but it's still a good optimization
