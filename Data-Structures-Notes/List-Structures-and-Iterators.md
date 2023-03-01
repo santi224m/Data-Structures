@@ -316,3 +316,11 @@ equal(List Iterator<item-type> other-iter) returns bool
   * We must instead look for a more balanced operation that performs all operations in a decent amount of time
 * Often the simplest solution will be to use a linear array
 * Keeping our data as an ADT allows us to easily switch to another data structure and measure which is slower or faster
+
+## Advantages / Disadvantages
+
+* Array Advantages
+  * You can access an element using an index, which is faster
+* Linked List Advantages
+  * You can change the size of the array easily
+  * You can insert an element anywhere in the list without having to shift any elements
