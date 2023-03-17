@@ -74,18 +74,18 @@ end method
 end type
 ```
 
-## Performance Analysis
-### Linked List Implementation
+### Performance Analysis
+#### Linked List Implementation
 * Accessing the first element and checking for emptiness runs in **O(1)**
 * The ```get-size()``` operation is rarely used in a stack, so it is fine to leave its running time as **O(n)**. This could be changed to **O(1)** by creating a variable that keeps track of the size if needed
-### Array Implementation
+#### Array Implementation
 * The array implementation keeps the bottom of the stack at the beginning of the array and grows it to the end of the array
 * This is because removing an element from the beginning of an array runs in **O(n)** since you need to shift all the elements to the right
 * Removing an element from the end of the array runs in **O(1)**
 * It is better to use a vector instead of an array for a Stack because an array has a size limit
 * All operations run in **O(1)** except for the ocasional push that has to resize the vector
 
-## Applications of Stacks
+### Applications of Stacks
 #### Converting a Decimal Number into a Binary Number
 * To convert from decimal to binary, you use the following algorithm
 ```cpp
@@ -111,3 +111,79 @@ while (!storeBinaryDigits.empty()) {
 }
 // Prints binary number in correct order
 ```
+
+## Queues
+* A queue is a basic data structure. The first element to be inserted into the queue is the first one to be removed (FIFO)
+
+```
+Queue<item-type> Operations
+enqueue (newItem :item-type)
+// Adds an item to the end of the queue
+
+front () :item-type
+// Returns item at the front of the queue
+
+dequeue ()
+// Removes item at the front of the queue
+
+is-empty () :Boolean
+// Returns true if no more items can be dequeued and there is no front, false otherwise
+
+is-full () :Boolean
+// Returns true if no more items can be enqueued
+
+get-size () :Integer
+// Returns the number of elements in the queue
+```
+  * All operations run in **O(1)**, except ```get-size()```, which runs in **O(n)**
+
+```cpp
+template <typename T>
+class Queue {
+ private:
+  Singly_Linked_List<T> list;
+  Singly_Linked_List<T>::Iterator tail;
+  
+ public:
+  // Constructor
+  Queue() {
+    list = new Singly_Linked_List<T>();
+    tail = list.begin();
+  }
+  
+  void enqueue(T newItem) {
+    if (is-empty()) {
+      list.prepend(newItem);
+      tail = list.begin();
+    } else {
+      list.insert_after(newItem, tail);
+      ++tail;
+    }
+  }
+  
+  T front() {
+    return list.begin().getElement();
+  }
+  
+  void dequeue() {
+    list.remove-first();
+    if(is-empty()) {
+      tail = list.begin();
+    }
+  }
+  
+  bool is-empty() {
+    return list.is-empty();
+  }
+  
+  // Liked list are limitless in size, so is-full should return false
+  bool is-full() {
+    return false;
+  }
+  
+  int get-size() {
+    return list.get-size();
+  }
+}
+```
+* When you want to enqueue an new item, the new item should point to the current tail as it's next. The tail should then be updated to point to the new item. This doesn't work if the list was empty.
