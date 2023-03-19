@@ -176,7 +176,7 @@ class Queue {
     return list.is-empty();
   }
   
-  // Liked list are limitless in size, so is-full should return false
+  // Liked list are limitless in size, so is-full() should return false
   bool is-full() {
     return false;
   }
@@ -187,3 +187,13 @@ class Queue {
 }
 ```
 * When you want to enqueue an new item, the new item should point to the current tail as it's next. The tail should then be updated to point to the new item. This doesn't work if the list was empty.
+* In a linked list, access to the first element runs in **O(1)** because the head pointer always points to the first element. This means that ```enqueue```, ```front```, and ```dequeue``` all run in **O(1)**
+* ```is-empty``` also runs in **O(1)**
+* The running time of ```get-size``` depends on how the linked list implemented its ```get-size``` method. ```get-size``` isn't used often in a queue, so it is fine to leave it unoptimized in order to save space
+
+## Deqeue
+* A deqeue is similar to a queue, but insertions and deletions can be done at both ends of the queue.
+* It is known as a double ended queue
+* Deque has two types:
+  * Input restricted queue - Insertion can only be done on one end of the queue
+  * Output restricted queue - Output can only be done on one end of the queue
