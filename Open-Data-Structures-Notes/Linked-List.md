@@ -23,7 +23,7 @@ template <typename T>
 class Node {
  public:
   T element_;  // Node element
-  Node *nextP;  // Pointer to next element
+  Node *nextP;  // Pointer to next node
   // CTOR
   Node(T el) {
     this->element_ = el;
@@ -113,7 +113,36 @@ Queue Implementation using a Singly Linked LIst in C++ (**remove()** and **add(x
   }
 ```
 
-## Summary
+## Singly Linked List Summary
 * A Singly Linked List can implement a Stack and a Queue in constant time for all operations
 * It can implement all the operations of a deque in constant time, except for removing from the tail. This is because in order to remove from the tail, the tail has to be updated to the Node preceding the current tail Node. To do this in a Singly Linked List, you would have to traverse the whole list.
 * If you want to impelement a deque using a linked list, you must use a Doubly Linked List for efficiency.
+
+## DLList: A Doubly-Linked List
+* A Doubly Linked List is very similar to a Singly Linked List. The difference is that Nodes in a Doubly Linked List have pointers to the next Node and the previous node in the list.
+
+Node in a Doubly Linked List
+```cpp
+template <typename T>
+class Node {
+ public:
+  T element_;  // Node element
+  Node *nextP;  // Pointer to next node
+  Node *prevP;  // Pointer to the previous node
+  // CTOR
+  Node(T el) {
+    this->element_ = el;
+    this->nextP = nullptr;
+    this->prevP = nullptr;
+  }
+};
+```
+
+* There are many more edge cases that we have to watch out for in a Doubly Linked List than in a Singly Linked List
+* One solution to this proposed in the text book is creating a dummy node that will always be in the list even when it is empty. This dummy node points its next pointer to the first node in the list and its previous pointer to the last node in the list
+  * This dummy node contains no data, it is only there so that we don't have to test for when the list is empty or when we are removing the last node
+  * When we use this dummy node, the Doubly Linked List is connected into a cycle with the dummy node connecting the head and the tail
+  
+Doubly Linked List Implementation Using a Dummy Node
+```cpp
+```
