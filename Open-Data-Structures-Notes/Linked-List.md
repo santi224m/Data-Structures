@@ -119,7 +119,7 @@ Queue Implementation using a Singly Linked LIst in C++ (**remove()** and **add(x
 * If you want to impelement a deque using a linked list, you must use a Doubly Linked List for efficiency.
 
 ## DLList: A Doubly-Linked List
-* A Doubly Linked List is very similar to a Singly Linked List. The difference is that Nodes in a Doubly Linked List have pointers to the next Node and the previous node in the list.
+* A Doubly Linked List is very similar to a Singly Linked List. The difference is that Nodes in a Doubly Linked List have pointers to the next node and the previous node in the list.
 
 Node in a Doubly Linked List
 ```cpp
@@ -139,10 +139,106 @@ class Node {
 ```
 
 * There are many more edge cases that we have to watch out for in a Doubly Linked List than in a Singly Linked List
-* One solution to this proposed in the text book is creating a dummy node that will always be in the list even when it is empty. This dummy node points its next pointer to the first node in the list and its previous pointer to the last node in the list
+* One solution to this proposed in the textbook is creating a dummy node that will always be in the list even when it is empty. This dummy node points its next pointer to the first node in the list and its previous pointer to the last node in the list
   * This dummy node contains no data, it is only there so that we don't have to test for when the list is empty or when we are removing the last node
   * When we use this dummy node, the Doubly Linked List is connected into a cycle with the dummy node connecting the head and the tail
+* When we want to search for a node, we traverse the Doubly Linked List by either starting at the head, which is the dummy node's next pointer and moving forward, or starting at the tail, which is the dummy node's previous pointer, and moving backward
+* The ```getNode(i)``` operation runs in **O(1 + min(i, n-i))**
+  * The operation can start from the head or the tail, depending on which one will take fewer steps to reach the desired index
+* The ```get(i)``` and ```set(i,x)``` operations use the ```getNode(i)``` to first locate the node and then operate on the node's element
+* When we want to insert a new node before a node in the list, we have to modify the pointers of the new node, the node we are inserting before, and the node before the node we are inserting before
+  * Here is how we will change the three nodes pointers for newNode, nodeAfterNewNode, and nodeBeforeNewNode
+  * Before we insert, nodeAfterNewNode's previous is pointing to nodeBeforeNewNode and nodeBeforeNewNode's next is pointing to nodeAfterNewNode
+  * We start by make newNode's next point to nodeAfterNewNode and newNode's previous point to nodeBeforeNewNode
+  * Once newNode is pointing to the correct nodes, we can modify nodeBeforeNewNode and nodeAfterNewNode
+  * We access nodeBeforeNewNode's next pointer by accessing newNode's previous and then accessing that nodes next. We change this to newNode.
+  * Finally, we access newNode's next and access that nodes' previous and make it point to newNode
+  * Now the change is complete and newNode sits between nodeBeforeNewNode and nodeAfterNewNode
+* The ```add(i,x)``` operation uses ```getNode(i)``` to find the node we want to insert before and passes the node pointer to ```addBefore(i,x)```
+* The ```remove(Node<T>* w)``` operation simply changes the pointers of the nodes before and after the node being removed so that they skip over it. It then deallocates the node being removed and decreases the size by 1.
+* There is also a ```remove(i)``` operation the takes in an index to remove. This operation finds the pointer to that node using ```getNode(i)``` and then passes the pointer to the ```remove(Node<T>* w)``` operation that takes in a node pointer. This operation returns the value of the element removed, while the other ```remove``` operation does not.
   
 Doubly Linked List Implementation Using a Dummy Node
 ```cpp
+template <typename T>
+class DLL {
+ public:
+  Node<T> dummy_;  // dummy node that points to head and tail nodes
+  int size_;
+  // CTOR
+  DLL() {
+    this->dummy_.prevP = &dummy_;
+    this->dummy_.nextP = &dummy_;
+    this->size_ = 0;
+  }
+  
+  Node<T>* getNode(int i) {
+    Node<T> *searchP;
+    if (i < this->size_ / 2) {
+      searchP = this->dummy_.nextP;
+      for (int j = 0; j < i; ++j) {
+        searchP = searchP->nextP;
+      }
+    } else {
+      searchP = &dummy_;
+      for (int j = this->size_; j > i; --j) {
+        searchP = searchP->prevP;
+      }
+    }
+    
+    return searchP;
+  }
+  
+  T get(int i) {
+    return getNode(i)->element_;
+  }
+  
+  T set(int i, T newElement) {
+    Node<T> *nodeP = getNode(i);
+    T tmpEl = nodeP->element_;
+    nodeP->element_ = newElement;
+    return tmpEl;
+  }
+  
+  Node<T>* addBefore(Node<T> *nodeAfterNewNodeP, T element) {
+    Node<T> *newNodeP = new Node<T>();
+    newNodeP->element_ = element;
+    // Change pointers
+    newNodeP->prevP = nodeAfterNewNodeP->prevP;
+    newNodeP->nextP = nodeAfterNewNodeP;
+    newNodeP->prevP->nextP = newNodeP;
+    newNodeP->nextP->prevP = newNodeP;
+    
+    this->size_++;
+    return newNodeP;
+  }
+  
+  void add(int i, T element) {
+    this->addBefore(this->getNode(i), element);
+  }
+  
+  void remove(Node<T> *removeNodeP) {
+    removeNodeP->prevP->nextP = removeNodeP->nextP;
+    removeNodeP->nextP->prevP = removeNodeP->prevP;
+    delete removeNodeP;
+    this->size_--;
+  }
+  
+  T remove(int i) {
+    Node<T> *removeNodeP = this->getNode(i);
+    T tmpElement = removeNodeP->element_;
+    this->remove(removeNodeP);
+    return tmpElement;
+  }
+};
 ```
+
+## Doubly Linked List Summary
+* In a Doubly Linked List, the following operations run in **O(1 + min(i,n-1))** time:
+  * get(i)
+  * set(i,x)
+  * add(i,x)
+  * remove(i)
+* The operations above run in that time complexity because of the ```getNode(i)``` operation. Once that operation is complete and a reference to the node is found, the remaining operations run in constant time
+* This is different to an array based list where you can find an element in constant time, but removing or adding an element runs in linear time
+* One possibility to improve the running time of a Doubly Linked List is to store references to the nodes in a set. This way, you can access the node in constant time and modify the list in constant time
