@@ -85,3 +85,39 @@ levelorder
 * To fix this, we need balancing routines, which will make sure that under all branches are an equal number of elements
 * Balancing routines are important to maintain optimal speed
 * In a degenerate tree with *n* elements, the longest path will be *n* nodes long, whereas in a balanced tree the longest pasth would be log *n* nodes
+* Balancing can change the tree structure while maintaining the binary tree sort order
+* The binary tree is ordered left to right with left elements being less than right elements
+* The priority order is up and down, with higher nodes having greater priority than lower nodes
+* **AVL** - A balanced binary search tree with the following specifications: The heights of the two child subtrees from a node vary by at most one
+* **Red-Black Tree** - A balanced binary search tree based on colors assigned to a node and colors of nearby nodes
+* **AA Tree** - A more restrictive version of a red-black tree
+
+# Binary Search Trees
+* Example of a binary search tree
+```
+// Binary Search Tree Visualization
+        50
+  30	      90
+20  40		100
+```
+
+## Terms
+* **Node** - Any item that is stored in the tree
+* **Root** - The top item in the tree
+* **Child** - Nodes under the current node
+* **Parent** - The node directly above the current node
+* **Leaf** - A node with no children
+
+## Searching through a binary search tree
+* To search for an item in a binary search tree, follow this process:
+  1. Start at the root node
+  2. If the item that you are looking for is less than the root node, move to the left child of the root node. If the item is greater than the root node, move to the right child of the root node. If the item is equal to what you are looking for, you have found the item.
+  3. Once you move to a new node, check if the item in that node is less than, greater than, or equal to the item you are looking for. If it is equal, you have found the item. If it is less, again move to the left child of the current node. If it is greater than, move to the right child of the current node.
+  4. Repeat step 3 until you find the item that you are looking for, or until you reach a leaf. If you reach a leaf and it does not contain the item, then it means that the item is not found in the list
+  
+## Adding an item to a binary search tree
+ 1. To add a new item to the binary search tree, first follow the steps above that you use to search throught the binary search tree
+ 2. Once you reach the end of the correct branch, where a node doesn't contain a child, you add the node to the end of that branch
+ 
+## Deleting an item from a binary search tree
+
