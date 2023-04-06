@@ -5,7 +5,7 @@
   * The **depth** of a node is the number of edges from the root to that node
   * The **height** of a node is the longest path from that node to one of its leaves
   * The height of a tree is the height of its root since it is the node with the biggest height
-* A **leaf node** is a node that has no childer. Its only path is up to its parent node
+* A **leaf node** is a node that has no children. Its only path is up to its parent node
 * In this section we will review 2 types of trees:
   * Binary Trees - Each node has zero, one, or two children. Operations on binary trees are simple and efficient
   * Binary Search Trees - A binary tree where every left child node has a value less than its parent node and every right child node has a value greater than or equal to its parent node
@@ -84,7 +84,7 @@ levelorder
   * This kind of tree is known as a degenerate tree
 * To fix this, we need balancing routines, which will make sure that under all branches are an equal number of elements
 * Balancing routines are important to maintain optimal speed
-* In a degenerate tree with *n* elements, the longest path will be *n* nodes long, whereas in a balanced tree the longest pasth would be log *n* nodes
+* In a degenerate tree with *n* elements, the longest path will be *n* nodes long, whereas in a balanced tree the longest path would be log *n* nodes
 * Balancing can change the tree structure while maintaining the binary tree sort order
 * The binary tree is ordered left to right with left elements being less than right elements
 * The priority order is up and down, with higher nodes having greater priority than lower nodes
@@ -120,4 +120,21 @@ levelorder
  2. Once you reach the end of the correct branch, where a node doesn't contain a child, you add the node to the end of that branch
  
 ## Deleting an item from a binary search tree
-
+* The first step in deleting an item is to find the item you want to delete using the search method above
+### Case 1: The node you want to delete is a leaf
+* In this case you just delete the node
+### Case 2: The node you are deleting has one child
+* Connect the child of the node that you want to delete to the parent of the node you want to delete
+### Case 3: The node you want to delete has two children
+* Pick either the left or right node and do the following. In this example, I will choose the right node of the item being deleted
+* Get the right node's leftmost descendent by following the left until you encounter a left node that doesn't have a left child
+* Remove this leftmost descendent and replace it with its right child if it has one
+* This leftmost descendent will take the place of the node being removed. You only need to copy the value of the leftmost descendent to the node being replaced instead of having to manipulate pointers
+#### Case 1 of two children case: The successor is the right child of the node being deleted
+* Move the right child of the node being deleted into the position of the node being deleted
+* Connect the deleted node's left child to the new node.
+  * We can do this because the new node has no left child. We know this because we replace the node being deleted with its right child's leftmost node. If the right child is replacing the node being deleted, then it must mean that it has no leftmost node
+#### Case 2 of two children case: The successor isn't the right child of the node being deleted
+* Replace the contents of the node to be deleted with the successors contents
+* Replace the successor with its right subtree.
+  * There is no left subtree because the successor was the leftmost node in its branch
