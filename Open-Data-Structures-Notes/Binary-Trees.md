@@ -75,3 +75,58 @@ int height(Node *currentNode) {
 ```
 * In the base case, we return -1 when the node points to nullptr because the height doesn't include the original node. So for example, if the node input into the function was a lead, there would be 1 node total, but the height would be 0. Returning -1 ensures that the final height returned is correct
 
+## Traversing Binary Trees
+* While it is possible to traverse a tree using recursion, this isn't ideal because if the tree has a height that is too big, traversing the tree recursively will take up too much space on the stack, and could even cause the program to crash
+* To traverse a tree without recussion, you must use an algorithm that decides where to go next based on where it came from
+* The algorithm works like this:
+  * If we arrive at a node from its parent, then the next step is to visit the nodes left child
+  * If we arrive at a node from its left child, then the next step is to visit the nodes right child
+  * If we arrive at a node from its right child, then we are done visiting the nodes subtree. The means the next step is to visit the nodes parent
+* Below is c++ code that implements this algorithm
+```cpp
+void traverse() {
+  Node *cursor = root;
+  Node *prev = nullptr;
+  Node *next = nullptr;
+  while (cursor != nullptr) {
+    // Check if node arrived from parent
+    if (prev == cursor->parent) {
+      if (cursor->left) {
+        next = cursor->left
+      } else if (cursor->right) {
+        next = cursor->right;
+      } else {
+        next = cursor->parent;
+      }
+    } else if (prev == cursor->left) {  // Check if node arrived from its left child
+      if (cursor->right) {
+        next = cursor->right;
+      } else {
+        next = cursor->parent;
+      }
+    } else {  // Node arrived from node's right child
+      next = cursor->parent;
+    }
+    
+    prev = cursor;
+    cursor = next;
+  }
+}
+```
+* We can also algorithms to compute the problems we implemented recusively in the seciond above: ```size()``` and ```height()```
+  * This way we don't have to take up as much memory on the stack
+* To implement the ```size()``` function with an algorithm, we would use the same code as the ```traverse()``` function, but would use a variable to keep track of the nodes we have visited and increment the variable each time we visit a parent node
+* During a **breadth-first** traversal, nodes in a tree are visited level by level, from left to right
+  * This type of traversal uses a queue to keep track of nodes and their order
+* Below is the c++ code for a breadth-first traversal
+```cpp
+void bfTraversal() {
+  ArrayQueue<Node*> q;
+  if (root) q.add(q.size(), root);
+  while(q.size() > 0) {
+    Node *cursor = q.remove(q.size() - 1);
+    if (cursor->left) q.add(q.size(), cursor->left);
+    if (cursor->right) q.add(q.size(), cursor->right);
+  }
+}
+```
