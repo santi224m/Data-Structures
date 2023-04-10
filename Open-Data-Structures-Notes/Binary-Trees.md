@@ -15,7 +15,7 @@
 * A node is a **leaf** if it has no children
 * In some cases, **external nodes** can be used as placeholders to show that a node has no children
   * Using external nodes in this manner can help simplify algorithims used on the tree because it removes the need to check for cases where a node has no left child or right child
-  * Whether you uses external nodes a placeholders can depend on the alorithims that you will be implementing and on personal preference
+  * Whether you use external nodes as placeholders can depend on the algorithms that you will be implementing and on personal preference
   * A binary tree with n >= 1 real nodes has n+1 external nodes
   
 # BinaryTree: A Basic Binary Tree
@@ -54,7 +54,7 @@ int depth(Node *currentNode) {
 * We use recursive alorithms to find details about binary trees
 
 #### Compute the size of a binary tree
-* To find the size of a binary tree, we start at the root node and find the size of its left child and right child. We do this recursively for a nodes and then add 1 to the result to account for the root node
+* To find the size of a binary tree, we start at the root node and find the size of its left child and right child. We do this recursively for all nodes and then add 1 to the result to account for the root node
 ```cpp
 int size(Node *root) {
   // Base case
@@ -73,7 +73,7 @@ int height(Node *currentNode) {
   return 1 + max(height(currentNode->left), height(currentNode->right));
 }
 ```
-* In the base case, we return -1 when the node points to nullptr because the height doesn't include the original node. So for example, if the node input into the function was a lead, there would be 1 node total, but the height would be 0. Returning -1 ensures that the final height returned is correct
+* In the base case, we return -1 when the node points to ```nullptr``` because the height doesn't include the original node. So for example, if the node input into the function was a lead, there would be 1 node total, but the height would be 0. Returning -1 ensures that the final height returned is correct
 
 ## Traversing Binary Trees
 * While it is possible to traverse a tree using recursion, this isn't ideal because if the tree has a height that is too big, traversing the tree recursively will take up too much space on the stack, and could even cause the program to crash
@@ -113,7 +113,7 @@ void traverse() {
   }
 }
 ```
-* We can also algorithms to compute the problems we implemented recusively in the seciond above: ```size()``` and ```height()```
+* We can also use algorithms to compute the problems we implemented recusively in the section above: ```size()``` and ```height()```
   * This way we don't have to take up as much memory on the stack
 * To implement the ```size()``` function with an algorithm, we would use the same code as the ```traverse()``` function, but would use a variable to keep track of the nodes we have visited and increment the variable each time we visit a parent node
 * During a **breadth-first** traversal, nodes in a tree are visited level by level, from left to right
@@ -130,3 +130,155 @@ void bfTraversal() {
   }
 }
 ```
+
+# BinarySearchTree: An Unbalanced Binary Search Tree
+* Each node ```x``` in a binary search tree contains a value ```u.x```
+* The value stored in the node ```u.left``` and the values of every node in ```u.left```'s subtree is always less than ```u.x```
+* Likewise, the value store in the node ```u.right``` and its subtree are always greater than ```u.x```
+
+## Searching
+* The properties of a binary search tree allow for quick search operations
+* Following is the procedure for searching through a binary search tree:
+  * Start at the root of the binary seach tree and traverse the tree until you find what you are searching for or come to the end of the tree
+  * Examine each node you traverse. There are three possibilities when you traverse the tree
+  * ```x``` is the value we are searching for. ```u``` is the node being examined
+    1. If ```x < u.x```, the search proceeds to ```u.left```
+    2. If ```x > u.x```, the search proceeds to ```u.right```
+    3. If ```x == u.x```, then we have found the node containing ```u.x```
+  * We finish the search when case 3 occurs, or when ```u.x == nullptr```
+  
+```cpp
+T findEQ(T searchVal) {
+  Node *cursor = rootNode;
+  while (cursor != nullptr) {
+    int comp = compare(searchVal, cursor->x);
+    if (comp < 0) {
+      cursor = cursor->left;
+    } else if (comp > 0 ) {
+      cursor = cursor->right;
+    } else {
+      return cursor->x;
+    }
+  }
+  
+  return nullptr;
+}
+```
+
+## Addition
+* To add a new value to a binary search tree, we first search for the value. If we find it in the tree, then there is no need to add it. If we don't find it, then we add it as a child to the last node that we encountered when searching for the value
+```cpp
+bool add(T val) {
+  Node *p = findLast(val);
+  Node *u = new Node;
+  u->x = val;
+  return addChild(p, u);
+}
+
+Node* findLast(T val) {
+  Node *cursor = rootNode;
+  Node *prev = nullptr;
+  while (cursor) {
+    prev = cursor;
+    int comp = compar(val, cursor->x);
+    if (comp < 0) {
+      cursor = cursor->left;
+    } else if (comp > 0) {
+      cursor = cursor->right;
+    } else {
+      return cursor;
+    }
+  }
+  
+  return prev;
+}
+
+bool addChild(Node *prev, Node *newNode) {
+  if (prev == nullptr) {
+    rootNode = newNode;  // inserting into an empty tree
+  } else {
+    int comp = compare(newNode->x, prev->x);
+    if (comp < 0) {
+      prev->left = newNode;
+    } else if (comp > 0) {
+      prev->right = newNode;
+    } else {
+      return false;  // newNode.x is already in the tree
+    }
+    newNode->parent = prev;
+  }
+  nodeCount++;
+  return true;
+}
+```
+* The most time consuming part of adding to a binary tree is searching for the value in the binary tree
+* The time is proportional to the height of the node being added
+* In the worst case, this is equal to the height of the tree
+
+## Removal
+* Removing a node can be difficult when the node has two children
+* If the node is a leaf, you can simply detach it from its parent
+* If the node has one child, you can splice the node by having the nodes parent adopt the nodes child
+```cpp
+void splice(Node *u) {
+  Node *child;
+  Node *parent;
+  if (u->left !== nullptr) {  // Since we know u only has one child, we check if it is the left or right child
+    child = u->left;
+  } else {
+    child = u->right;
+  }
+  if (u == rootNode) {
+    rootNode = child;
+    parent = nullptr;
+  } else {
+    parent = u->parent;
+    if (parent->left == u) {
+      parent->left = child;
+    } else {
+      parent->right = child;
+    }
+  }
+  if (child) {
+    child->parent = parent;
+  }
+  nodeCount--;
+}
+```
+
+* When the node being removed has two children, we have to do the following
+  * Find a node ```w``` that has less than two children and can replace ```u```
+  * ```w``` will be the smallest value in the subtree rooted at ```u.right```. In other words, the leftmost node of ```u.right```
+  * We use the leftmost node of ```u.right``` because it is guaranteed to only have one child or less. It cannot have a left child
+  
+```cpp
+void remove(Node *u) {
+  if (u->left == nullptr || u->right == nullptr) {  // Check if u has less than two children
+    splice(u);
+    delete u;
+  } else {
+    Node *w = u->right;
+    while (w->left) {
+      w = w->left;
+    }
+    u->x = w->x;  // Replace u's value with w's value
+    splice(w);
+    delete w;
+  }
+}
+```
+
+## Summary
+* The following operations run in **O(n)** time in a binary search tree:
+  * ```add(x)```
+  * ```remove(x)```
+  * ```find(x)```
+* The problem with binary search trees is that they can become unbalanced. This is what causes a **O(n))** time
+* The solution to this is to implement it in a way where it is always balanced, which bring the complexity to **O(log n)**
+
+## Discussion
+* When designing a binary tree, you must decided whether the nodes should have a pointer to their parent
+* If we are only traversing down a tree, then a pointer is unnecessary and takes up space
+* We do need a parent if we want to traverse the tree without using recursion
+* The lack of a parent pointer also makes other operations more difficult
+* You can store pointers to the left child, right child, and parent in an array. This way, you can use algebraic expressions in an if statement
