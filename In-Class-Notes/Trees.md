@@ -81,3 +81,11 @@ void preorder(Node<T> *ptr) {
   preorder(ptr->right);
 }
 ```
+
+## Types of trees
+* Full
+* Complete
+* Perfect
+
+## std::map
+* The c++ map uses a tree under the hood
