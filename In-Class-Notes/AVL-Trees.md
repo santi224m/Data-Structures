@@ -32,6 +32,9 @@ BF(x) = Height(RightSubTree(x)) - Height(LeftSubTree(x))
   * single right rotation
   * double left rotation
   * double right rotation
+
+![Tree Rotations](./Images/Tree_Rotation_Types.png)
+  
   
 ## AVL Tree Performance
 * A single restructure taks **O(1)** time
